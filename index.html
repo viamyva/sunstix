@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ticket System</title>
+</head>
+<body>
+    <h1>Ticket System</h1>
+    <form id="ticketForm">
+        <input type="text" id="title" placeholder="Title" required>
+        <textarea id="description" placeholder="Description" required></textarea>
+        <button type="submit">Create Ticket</button>
+    </form>
+    <h2>Tickets</h2>
+    <ul id="ticketList"></ul>
+
+    <script>
+        const apiBaseUrl = 'https://ticket-system-service.onrender.com'; // This will be automatically handled by Render
+
+        document.getElementById('ticketForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+
+            fetch(`${apiBaseUrl}/api/tickets`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description })
+            })
+            .then(response => response.json())
+            .then(ticket => {
+                const ticketList = document.getElementById('ticketList');
+                const listItem = document.createElement('li');
+                listItem.textContent = `#${ticket.id} - ${ticket.title} - ${ticket.description} - ${ticket.status}`;
+                ticketList.appendChild(listItem);
+                document.getElementById('ticketForm').reset();
+            });
+        });
+
+        function loadTickets() {
+            fetch(`${apiBaseUrl}/api/tickets`)
+                .then(response => response.json())
+                .then(tickets => {
+                    const ticketList = document.getElementById('ticketList');
+                    ticketList.innerHTML = '';
+                    tickets.forEach(ticket => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `#${ticket.id} - ${ticket.title} - ${ticket.description} - ${ticket.status}`;
+                        ticketList.appendChild(listItem);
+                    });
+                });
+        }
+
+        loadTickets();
+    </script>
+</body>
+</html>
