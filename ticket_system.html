@@ -14,14 +14,14 @@
     <ul id="ticketList"></ul>
 
     <script>
-        const apiBaseUrl = 'https://your-app.onrender.com'; // Replace with your Render app URL
+        const apiBaseUrl = 'https://your-flask-app.com/api'; // Replace with your Flask app URL
 
         document.getElementById('ticketForm').addEventListener('submit', function(event) {
             event.preventDefault();
             const title = document.getElementById('title').value;
             const description = document.getElementById('description').value;
 
-            fetch(`${apiBaseUrl}/api/tickets`, {
+            fetch(`${apiBaseUrl}/tickets`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title, description })
@@ -37,7 +37,7 @@
         });
 
         function loadTickets() {
-            fetch(`${apiBaseUrl}/api/tickets`)
+            fetch(`${apiBaseUrl}/tickets`)
                 .then(response => response.json())
                 .then(tickets => {
                     const ticketList = document.getElementById('ticketList');
